@@ -16,7 +16,9 @@ module.exports = {
         "d" : ""
 
       },
+      "white" : "#fff",
       "error" : "#F64225",
+      "formbg" : "#F9FAFB"
 
     },
 

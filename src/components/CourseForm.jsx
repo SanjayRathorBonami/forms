@@ -1,47 +1,70 @@
 import React from "react";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
 import validationSchema from "../validation/cform";
 import Error from "./Error";
+import FormikField from "./FormikField";
 
 const CourseForm = () => {
   const initialValues = {
-    name: "",
-    age: "",
-    email: "",
+    courses: [
+      {
+        name: "",
+        field: "",
+        year: "",
+      },
+    ],
   };
 
   const onSubmit = (values) => {
-    console.log(values);
+    console.log("form submitted");
+    console.log("values", values);
   };
 
   return (
-    <>
+    <div>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
-      >
-        {({errors,touched})=>(
+        render={({ values, touched }) => (
           <Form>
-          <Field name="name" type="text" className="bg-main-m" />
-          {errors.name && <Error message = {errors.name} />}
-          <Field name="field" type="string" />
-          {errors.field && <Error message = {errors.field} />}
-          <Field name="year" type="number" />
-          {errors.year && <Error message = {errors.year} />}
-          <button
-            className="bg-main-m px-8 py-4 rounded-md shadow-lg text-blue"
-            type="submit"
-          >
-            Login
-          </button>
-        </Form>
+            <FieldArray
+              name="courses"
+              render={({ insert, remove, push }) => (
+                <>
+                  {values.courses.map((course, index) => (
+                    <div>
+                      <Field
+                        name={`courses.${index}.name`}
+                        placeholder="Enter course name"
+                      />
+                      <Field
+                        name={`courses.${index}.field`}
+                        placeholder="Enter field"
+                      />
+                      <Field
+                        name={`courses.${index}.year`}
+                        placeholder="Enter Year "
+                      />
+                      <button onClick={() => remove(index)}>Remove</button>
+                    </div>
+                  ))}
+                </>
+              )}
+            />
+            <button
+              className="bg-main-m px-6 py-3 rounded-md shadow-lg text-white mt-2"
+              type="submit"
+            >
+              Submit
+            </button>
+          </Form>
         )}
-        
-      </Formik>
-      
-    </>
+      />
+    </div>
   );
 };
+
+//
 
 export default CourseForm;
